@@ -1,4 +1,4 @@
-\# Coursea 🚀
+## Coursea 🚀
 
 
 
@@ -6,7 +6,7 @@ Backend for a course selling platform built using Node.js and Express.
 
 
 
-\## Features
+## Features
 
 \- User Signup
 
@@ -18,7 +18,7 @@ Backend for a course selling platform built using Node.js and Express.
 
 
 
-\## Tech Stack
+## Tech Stack
 
 \- Node.js
 
@@ -26,7 +26,7 @@ Backend for a course selling platform built using Node.js and Express.
 
 
 
-\## Run Locally
+## Run Locally
 
 ```bash
 
