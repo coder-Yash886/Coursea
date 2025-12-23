@@ -1,20 +1,22 @@
 const {Router} = require("express");
 const adminRouter = Router();
-const {adminModel} = require("../db");
+const bcrypt = require("bcrypt");
+const {adminModel, courseModel} = require("../db");
 const jwt = require("jsonwebtoken");
-
-const JWT_ADMIN_PASSWORD = "12345ngj5678";
+const {JWT_ADMIN_PASSWORD} = require("../config");
+const {adminmiddleware} = require("../middleware/admin")
 
 
 adminRouter.post("/signup",async function(req,res){
 
     const {email,password,firstname,lastname} = req.body;
-           await adminModel.create({
-                email: email,
-                password: password,
-                firstname: firstname,
-                lastname: lastname
-            })
+           const hashedPassword = await bcrypt.hash(password, 10);
+       await adminModel.create({
+            email: email,
+            password: hashedPassword,
+            firstname: firstname,
+            lastname: lastname
+        })
         res.json({
             message: "Signup Succeeded "
         })
@@ -31,8 +33,13 @@ adminRouter.post("/signin",async function(req,res){
       
           const admin = await adminModel.findOne({
               email: email,
-              password: password
           });
+          const isPasswordCorrect = await bcrypt.compare(password, admin.password);
+              if (!isPasswordCorrect) {
+                  return res.status(403).json({
+                      message: "Invalid credentials"
+                  });
+              }
       
           if(admin){
           const token =  jwt.sign({
@@ -54,9 +61,22 @@ adminRouter.post("/signin",async function(req,res){
     })
 })
 
-adminRouter.post("/course",function(req,res){
+adminRouter.post("/course",adminmiddleware,async function(req,res){
+    const adminId = req.userId;
+
+    const {title,description,imageUrl,price} = req.body;
+
+   const course =  await courseModel.create({
+        title,
+        description,
+        imageUrl,
+        price,
+        creterid: adminId
+
+    })
     res.json({
-        message: "course endpoint"
+        message: "Course Created",
+        courseId: course._id
     })
 })
 
