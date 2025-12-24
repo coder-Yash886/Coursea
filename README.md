@@ -1,4 +1,4 @@
-## Coursea 🚀
+## Coursera 🚀
 
 
 
