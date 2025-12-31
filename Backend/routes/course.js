@@ -14,7 +14,7 @@ courseRouter.post("/purchases", usermiddleware, async function (req, res) {
     });
 
     res.json({
-        message: "You have successfully bought the course"
+        message: "You have successfully buy the course"
     });
 });
 
